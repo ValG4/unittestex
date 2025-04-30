@@ -6,6 +6,7 @@ import animals.petstore.pet.attributes.Gender;
 import animals.petstore.pet.attributes.Skin;
 import animals.petstore.pet.types.Cat;
 import animals.petstore.pet.types.Dog;
+import animals.petstore.pet.types.Snake;
 import animals.petstore.store.DuplicatePetStoreRecordException;
 import animals.petstore.store.PetNotFoundSaleException;
 import animals.petstore.store.PetStore;
@@ -39,7 +40,7 @@ public class PetStoreTest
     @DisplayName("Inventory Count Test")
     public void validateInventory()
     {
-        assertEquals(5, petStore.getPetsForSale().size(),"Inventory counts are off!");
+        assertEquals(8, petStore.getPetsForSale().size(),"Inventory counts are off!");
     }
 
     @Test
@@ -61,6 +62,38 @@ public class PetStoreTest
         assertEquals(inventorySize, petStore.getPetsForSale().size(), "Expected inventory does not match actual");
     }
 
+
+
+
+
+    @Test
+    @DisplayName("Sale of Burmese Cat Remove Item Test")
+    public void burmeseSoldTest() throws DuplicatePetStoreRecordException, PetNotFoundSaleException {
+        int inventorySize = petStore.getPetsForSale().size() - 1;
+        Cat burmese = new Cat(AnimalType.DOMESTIC, Skin.HAIR, Gender.MALE, Breed.BURMESE,
+                new BigDecimal("65.00"), 1);
+
+        // Validation
+        petStore.soldPetItem(burmese);
+        assertEquals(inventorySize, petStore.getPetsForSale().size(), "Expected inventory does not match actual");
+    }
+
+    @Test
+    @DisplayName("Poodle Record Not Found Exception Test")
+    public void petNotFoundTest() throws PetNotFoundSaleException, DuplicatePetStoreRecordException {
+        //soldPetItem method in petstore
+        //throws PetNotFoundSaleException if the pet is not in any store aka petStoreid == 0
+        petStore.addPetInventoryItem(new Dog(AnimalType.DOMESTIC, Skin.FUR, Gender.FEMALE, Breed.POODLE,
+                new BigDecimal("220.00"), 0));
+        Dog poodle = new Dog(AnimalType.DOMESTIC, Skin.FUR, Gender.FEMALE, Breed.POODLE,
+                new BigDecimal("220.00"), 0);
+
+        String expectedMessage = "The Pet is not part of the pet store!!";
+        Exception exception = assertThrows(PetNotFoundSaleException.class, () ->{
+            petStore.soldPetItem(poodle);});
+        assertEquals(expectedMessage, exception.getMessage(), "RecordNotFoundExceptionTest was NOT encountered!");
+    } // end of petNotFoundTest
+
     @Test
     @DisplayName("Poodle Duplicate Record Exception Test")
     public void poodleDupRecordExceptionTest() {
@@ -73,6 +106,35 @@ public class PetStoreTest
         String expectedMessage = "Duplicate Dog record store id [1]";
         Exception exception = assertThrows(DuplicatePetStoreRecordException.class, () ->{
             petStore.soldPetItem(poodle);});
+        assertEquals(expectedMessage, exception.getMessage(), "DuplicateRecordExceptionTest was NOT encountered!");
+
+    }
+
+    @Test
+    @DisplayName("Sale of Grass Remove Item Test")
+    public void grassSoldTest() throws DuplicatePetStoreRecordException, PetNotFoundSaleException {
+        int inventorySize = petStore.getPetsForSale().size() - 1;
+        Snake grass = new Snake(AnimalType.DOMESTIC, Skin.SCALES, Gender.MALE, Breed.GRASS,
+                new BigDecimal("2.00"),3);
+
+        // Validation
+        petStore.soldPetItem(grass);
+        assertEquals(inventorySize+3, petStore.getPetsForSale().size(), "Expected inventory does not match actual");
+    }
+
+
+    @Test
+    @DisplayName("Grass Duplicate Record Exception Test")
+    public void grassDupRecordExceptionTest() {
+        petStore.addPetInventoryItem(new Snake(AnimalType.DOMESTIC, Skin.SCALES, Gender.MALE, Breed.GRASS,
+                new BigDecimal("2.00"), 3));
+        Snake grass = new Snake(AnimalType.DOMESTIC, Skin.SCALES, Gender.MALE, Breed.GRASS,
+                new BigDecimal("2.00"), 3);
+
+        // Validation
+        String expectedMessage = "Duplicate Snake record store id [3]";
+        Exception exception = assertThrows(DuplicatePetStoreRecordException.class, () ->{
+            petStore.soldPetItem(grass);});
         assertEquals(expectedMessage, exception.getMessage(), "DuplicateRecordExceptionTest was NOT encountered!");
 
     }
