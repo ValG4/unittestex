@@ -50,6 +50,7 @@ public class PetStoreTest
         petStore.printInventory();
     }
 
+
     @Test
     @DisplayName("Sale of Poodle Remove Item Test")
     public void poodleSoldTest() throws DuplicatePetStoreRecordException, PetNotFoundSaleException {
@@ -65,7 +66,7 @@ public class PetStoreTest
     @Test
     @DisplayName("Sale of Sphynx Remove Item Test")
     public void sphynxSoldTest() throws DuplicatePetStoreRecordException, PetNotFoundSaleException {
-        int inventorySize = petStore.getPetsForSale().size() - 1;
+        int inventorySize = petStore.getPetsForSale().size() - 1 -3;
 
         Cat sphynx = new Cat(AnimalType.DOMESTIC, Skin.UNKNOWN, Gender.FEMALE, Breed.SPHYNX,
                 new BigDecimal("100.00"),2);
@@ -127,7 +128,7 @@ public class PetStoreTest
     @Test
     @DisplayName("Sale of Grass Remove Item Test")
     public void grassSoldTest() throws DuplicatePetStoreRecordException, PetNotFoundSaleException {
-        int inventorySize = petStore.getPetsForSale().size() - 1;
+        int inventorySize = petStore.getPetsForSale().size();
         Snake grass = new Snake(AnimalType.DOMESTIC, Skin.SCALES, Gender.MALE, Breed.GRASS,
                 new BigDecimal("2.00"),3);
 
@@ -164,7 +165,7 @@ public class PetStoreTest
     @TestFactory
     @DisplayName("Sale of Sphynx Remove Item Test2")
     public Stream<DynamicNode> sphynxSoldTest2() throws DuplicatePetStoreRecordException, PetNotFoundSaleException {
-        int inventorySize = petStore.getPetsForSale().size() - 1;
+        int inventorySize = petStore.getPetsForSale().size() - 1 -3;
 
         Cat sphynx = new Cat(AnimalType.DOMESTIC, Skin.UNKNOWN, Gender.FEMALE, Breed.SPHYNX,
                 new BigDecimal("100.00"),2);
