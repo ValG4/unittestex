@@ -125,6 +125,11 @@ public class PetStore
                 .collect(Collectors.toList());
         switch(petType)
         {
+            case SNAKE:
+                this.petsForSale = this.petsForSale.stream()
+                        .filter(p -> ((p instanceof Snake)
+                        && (p.getPetStoreId() != petStoreId)))
+                        .collect(Collectors.toList());
             case CAT:
                 this.petsForSale = this.petsForSale.stream()
                         .filter(p -> ((p instanceof Cat)
